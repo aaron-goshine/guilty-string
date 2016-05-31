@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>  
+    <meta charset="UTF-8">
+    <title>Untitled Page</title>
+    <script  type="text/javascript">
+      var isGuilt = (evidence, carry, tryials) => {
+        var guilty = 'guilty';
+        if (tryials === guilty.length) {
+          return carry;
+        }
+        var char = guilty[tryials];
+        var match = evidence.match(new RegExp(char));
+        carry.push(match ? true : false);
+        return isGuilt(evidence, carry, tryials+=1);
+      };
+      var evidence ='this is this is a guilty string that will be the determinant';
+      var verdict = isGuilt(evidence, [], 0);
+      var collectiveVerdict = verdict.filter((bool)=> {
+        return !bool;
+      }); 
+      alert('The verdict: ' + verdict);
+      alert('The collective verdict: ' + ((collectiveVerdict.length > 0) ? 'not guilty' : 'guilty'));
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
+
