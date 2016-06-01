@@ -4,23 +4,31 @@
     <meta charset="UTF-8">
     <title>Untitled Page</title>
     <script  type="text/javascript">
-      var isGuilt = (evidence, carry, tryials) => {
-        var guilty = 'guilty';
-        if (tryials === guilty.length) {
-          return carry;
-        }
-        var char = guilty[tryials];
+    /**
+    * @name isGuilty
+    * @function
+    * @param {string} defendant - a string representing the defendant
+    * @param {string} evidence - a string representing the evidence
+    * @param {array} jurysVerdict - a list to collect the verdicts
+    * @param {number} trials - a number to increment the trials count 
+    */
+
+      var isGuilty = (defendant, evidence, jurysVerdict, trials) => {
+        if (trials === defendant.length) return jurysVerdict;
+        var char = defendant.charAt(trials);
         var match = evidence.match(new RegExp(char));
-        carry.push(match ? true : false);
-        return isGuilt(evidence, carry, tryials+=1);
+        jurysVerdict.push(match ? true : false);
+        return isGuilty(defendant, evidence, jurysVerdict, trials+=1);
       };
-      var evidence ='this is this is a guilty string that will be the determinant';
-      var verdict = isGuilt(evidence, [], 0);
-      var collectiveVerdict = verdict.filter((bool)=> {
+
+      var defendant = 'proven guilty';
+      var evidence ='This is this is a guilty string that will be the determinant over the case';
+      var verdict = isGuilty(defendant, evidence, [], 0);
+      var judgeVerdict = verdict.filter((bool)=> {
         return !bool;
       }); 
       alert('The verdict: ' + verdict);
-      alert('The collective verdict: ' + ((collectiveVerdict.length > 0) ? 'not guilty' : 'guilty'));
+      alert('The judge verdict: ' + ((judgeVerdict.length > 0) ? 'not guilty' : 'guilty'));
     </script>
   </head>
   <body>
