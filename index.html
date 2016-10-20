@@ -2,7 +2,7 @@
 <html lang="en">
   <head>  
     <meta charset="UTF-8">
-    <title>Untitled Page</title>
+    <title>Guilty Sting</title>
     <style>
       * {
         font-family: arial; 
@@ -67,36 +67,58 @@
 
 
 // ==============================================
+let defaultMessage = 'The judge verdict is: not guilty';
+
 let message = document.getElementById('message');
 let defendantField = document.getElementById('defendant-field');
 let evidenceField = document.getElementById('evidence-field');
 let tryButton = document.getElementById('tryButton');
 
 tryButton.addEventListener('click', function () {
-  let defendant = defendantField.value;
-  let evidence = evidenceField.value;
-  if (defendant === evidence) {
-    alert('they can be the same');
+  message.innerHTML = defaultMessage;
+  let defendant = defendantField.value.split('').sort().join('');
+  let evidence = evidenceField.value.split('').sort().join('');
+  let dLen = defendant.length;
+  if (defendant.match(new RegExp(defendant[(Math.random() * dLen | 1) - 1] , 'gi')).length > (2 << 2) ||
+    defendant[0] === defendant[dLen -1 ] &&
+    defendant[(Math.random() * dLen | 1) - 1 ] === defendant[dLen -1 ] ){
+      message.innerHTML ='Your defendant string does not look right';
+      return;
+    }
+
+  if (defendant[0] === defendant[dLen -1 ] && defendant[(Math.random() * dLen | 1) - (dLen / 2) + 1 ] === defendant[(dLen / 2) + 1 ] ){
+    message.innerHTML ='Your defendant string does not look right';
     return;
   }
-  if (defendant.length < 8 || defendant.length <= 80) {
-    // these are not hard rules
-    console.log('defendant should less than 80 and greater than 8 characters'); 
+
+  if (dLen < ((4 << 3 ) - (2 << 2))) {
+    message.innerHTML ='Defendant should be greater';
+    return;
   }
 
-  if (evidence.length < 80) {
-    // these are not hard rules
-    console.log('The evidence should be 80 characters or greater'); 
+  if (evidence.length > (4 << 2 + 1) || evidence.length < ((4 << 2 + 1) * 0.3) + 1) {
+    message.innerHTML ='The evidence does not look good';
+    return;
+  }
+
+  if (defendant === evidence) {
+    message.innerHTML ='they can\'t be the same';
+    return;
+  }
+
+  if ((defendant.length - evidence.length) < (4 << 1 ^ 2)) {
+    message.innerHTML ='You need about few more defendants';
+    return;
   }
 
   let verdict = isGuilty(defendant, evidence, [], 0);
   let judgeVerdict = verdict.filter((bool)=> {
     return !bool;
   }); 
-  verdict = ('The judge verdict is: ' + ((judgeVerdict.length > 0) ? 'not guilty' : 'guilty'));
-  console.log(defendant, evidence, verdict);
-  message.innerHTML = verdict;
+  defaultMessage = ('The judge verdict is: ' + ((judgeVerdict.length > 0) ? 'not guilty' : 'guilty'));
+  message.innerHTML = defaultMessage;
 });
+
     </script>
   </body>
 </html>
