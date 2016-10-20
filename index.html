@@ -3,35 +3,101 @@
   <head>  
     <meta charset="UTF-8">
     <title>Untitled Page</title>
-    <script  type="text/javascript">
-    /**
-    * @name isGuilty
-    * @function
-    * @param {string} defendant - a string representing the defendant
-    * @param {string} evidence - a string representing the evidence
-    * @param {array} jurysVerdict - a list to collect the verdicts
-    * @param {number} trials - a number to increment the trials count 
-    */
+    <style>
+      * {
+        font-family: arial; 
+      }
+      div {
+        margin-bottom: 20px; 
+      }
 
-      var isGuilty = (defendant, evidence, jurysVerdict, trials) => {
-        if (trials === defendant.length) return jurysVerdict;
-        var char = defendant.charAt(trials);
-        var match = evidence.match(new RegExp(char));
-        jurysVerdict.push(match ? true : false);
-        return isGuilty(defendant, evidence, jurysVerdict, trials+=1);
-      };
-
-      var defendant = 'proven guilty';
-      var evidence ='This is this is a guilty string that will be the determinant over the case';
-      var verdict = isGuilty(defendant, evidence, [], 0);
-      var judgeVerdict = verdict.filter((bool)=> {
-        return !bool;
-      }); 
-      alert('The verdict: ' + verdict);
-      alert('The judge verdict: ' + ((judgeVerdict.length > 0) ? 'not guilty' : 'guilty'));
-    </script>
+      label {
+        margin-bottom: 10px; 
+        display: block;
+      }
+      input {
+        font-size: 24px;
+        width: 100%; 
+      }
+      button {
+        padding: 20px; 
+      }
+    </style>
   </head>
   <body>
+
+    <h1>Guilty or not Guilty!</h1>
+    <p>Hello brilliant ones, I propose a challenge;
+      here are two fields bellow one representing the defendant and the other the evidence.
+    </p>
+    <p>
+      You are to populate both field with different strings that will result in a guilty verdict.
+      By studying the code you should be able to figure out how it works
+    </p>
+    <h2 id="message"></h2>
+    <div>
+      <label for="evidence-field">Defendant</label>
+      <input name="defendant-field" id="defendant-field" />
+    </div>
+
+    <div>
+      <label for="evidence-field">Evidence</label>
+      <input name="evidence-field" id="evidence-field" />
+    </div>
+
+    <button id="tryButton">Try</button> 
+    <script  type="text/javascript">
+      /**
+       * @name isGuilty
+       * @function
+       * @param {string} defendant - a string representing the defendant
+       * @param {string} evidence - a string representing the evidence
+       * @param {array} jurysVerdict - a list to collect the verdicts
+       * @param {number} trials - a number to increment the trials count 
+       */
+
+  let isGuilty = (defendant, evidence, jurysVerdict, trials) => {
+    if (trials === defendant.length) return jurysVerdict;
+    let char = defendant.charAt(trials);
+    let match = evidence.match(new RegExp(char));
+    jurysVerdict.push(match ? true : false);
+    return isGuilty(defendant, evidence, jurysVerdict, trials+=1);
+  };
+
+
+
+// ==============================================
+let message = document.getElementById('message');
+let defendantField = document.getElementById('defendant-field');
+let evidenceField = document.getElementById('evidence-field');
+let tryButton = document.getElementById('tryButton');
+
+tryButton.addEventListener('click', function () {
+  let defendant = defendantField.value;
+  let evidence = evidenceField.value;
+  if (defendant === evidence) {
+    alert('they can be the same');
+    return;
+  }
+  if (defendant.length < 8 || defendant.length <= 80) {
+    // these are not hard rules
+    console.log('defendant should less than 80 and greater than 8 characters'); 
+  }
+
+  if (evidence.length < 80) {
+    // these are not hard rules
+    console.log('The evidence should be 80 characters or greater'); 
+  }
+
+  let verdict = isGuilty(defendant, evidence, [], 0);
+  let judgeVerdict = verdict.filter((bool)=> {
+    return !bool;
+  }); 
+  verdict = ('The judge verdict is: ' + ((judgeVerdict.length > 0) ? 'not guilty' : 'guilty'));
+  console.log(defendant, evidence, verdict);
+  message.innerHTML = verdict;
+});
+    </script>
   </body>
 </html>
 
